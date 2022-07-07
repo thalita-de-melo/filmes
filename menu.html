@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-	<meta charset="utf-8" />
+<html>
+  <head>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
     <link rel="stylesheet" href="css/style.css" />
@@ -31,25 +32,48 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   </head>
-  <body>
+  <body class="bg-dark">
     <div class="main">
-      <div class="container">
-   
-			<input type="text" id="usuario" name="usuario">
-			<input type="number" id="senha" name="senha">
-			<button onclick="getData(document.getElementById('usuario').value,document.getElementById('senha').value)">enviar</button>
-	
+      <div class="container-md text-center">
+        <div class="col mx-auto mt-3">
+          <h1 style="color: ghostwhite">Prepare a pipoca</h1>
+        </div>
+        <div class="col mx-auto mt-3">
+          <i class="bi bi-film icon"></i>
+        </div>
+        <div class="col mx-auto mt-3">
+          <button
+            class="btn btn-outline-info btn-lg px-4 fw-bold mt-2"
+            onclick="procuraAleatorio()"
+          >
+            Escolha
+          </button>
+          <a
+            class="btn btn-outline-info btn-lg px-4 fw-bold mt-2"
+            href="adicionar.html"
+            role="button"
+            >Adicione um Filme</a
+          >
+          <button
+            class="btn btn-outline-info btn-lg px-4 fw-bold mt-2"
+            onclick="getAllData()"
+          >
+            Listar
+          </button>
+        </div>
+        <div id="ver" class="mt-2" style="color: white"></div>
       </div>
+      <div id="content"></div>
     </div>
 
-  
-
     <script>
+      var api_key = "?api_key=89e672244e364d235a99109e1f362dda";
 
-function add(a,b) {
-    var sum = parseInt(a) + parseInt(b);
-    alert(sum);
-  }
+      var SEARCHAPI =
+        "https://api.themoviedb.org/3/search/movie" +
+        api_key +
+        "&region=EN&query=";
+
       // Your web app's Firebase configuration
       const firebaseConfig = {
         apiKey: "AIzaSyAnskgO2Vic8jlhwRyYXK8fx-u0AvOnfUQ",
@@ -67,59 +91,40 @@ function add(a,b) {
 
       const db = firebase.firestore();
 
-      var colecao = db.collection("users");
-
-      function procuraAleatorio() {
-        //pega todos os documentos
-        var lista = [];
-        var i = 0;
-        let tamanho = 0;
-
-        colecao.get().then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            //console.log(doc.id, " => ", doc.data());
-
-            lista[i] = doc.get("nome");
-            console.log(lista[i]);
-            tamanho = lista.length;
-            //console.log(tamanho);
-            i++;
-          });
-          const rndInt = Math.floor(Math.random() * tamanho) + 1;
-          var id = lista[rndInt];
-          console.log(id);
-          setAleatorio(id);
-        });
-      }
+      var colecao = db.collection("filmes");
 
       function getAllData() {
         //pega todos os documentos
+
+        var list = [];
+        let cont = 0;
+        let contador = 0;
 
         colecao.get().then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             console.log(doc.id, " => ", doc.data());
-
-            i++;
+            list[cont] = doc.get("nome");
+            cont++;
+          });
+          let divHtml = document.getElementById("ver");
+          list.forEach((item) => {
+            let li = document.createElement("li");
+            li.innerText = item;
+            divHtml.appendChild(li);
           });
         });
       }
 
-      function getData($usuario, $senha) {
+      function getData() {
         // pega todos os documentos com um determinado campo
-		alert($usuario + $senha)
         colecao
-          .where("usuario", "==", $usuario)
+          .where("status", "==", true)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               // doc.data() is never undefined for query doc snapshots
               console.log(doc.id, " => ", doc.data());
-			  console.log(doc.data().senha)
-			  if($senha == doc.data().senha){
-				window.open("menu.html","_self")
-			  }
             });
           })
           .catch((error) => {
@@ -195,6 +200,33 @@ function add(a,b) {
         console.log(valor);
 
         adiciona(valor);
+      }
+
+      function procuraAleatorio() {
+        //pega todos os documentos
+        var lista = [];
+        var i = 0;
+        let tamanho = 0;
+
+        colecao.get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            //console.log(doc.id, " => ", doc.data());
+
+            lista[i] = doc.get("nome");
+            console.log(lista[i]);
+            tamanho = lista.length;
+            //console.log(tamanho);
+            i++;
+          });
+          const rndInt = Math.floor(Math.random() * tamanho) + 1;
+          var id = lista[rndInt];
+          console.log(id);
+          setAleatorio(id);
+          getMovies(SEARCHAPI + id);
+          deletData(id);
+          //document.getElementById("ver").innerHTML = `<button class="btn btn-outline-info btn-lg px-4 fw-bold" onclick="deletData(${id})">Assistir</button>`;
+        });
       }
     </script>
   </body>
