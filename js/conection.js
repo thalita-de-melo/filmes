@@ -17,7 +17,7 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-var colecao = db.collection("users");
+var colecao = db.collection("filmes");
 
 function procuraAleatorio() {
   //pega todos os documentos
@@ -45,6 +45,8 @@ function procuraAleatorio() {
 
 function getAllData() {
   //pega todos os documentos
+
+  var i = 0;
 
   colecao.get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
