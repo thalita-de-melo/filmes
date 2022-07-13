@@ -26,7 +26,8 @@ function data(email, password) {
       // Signed in
       console.log("logado");
       const user = userCredential.user;
-      window.open("menu.html", "_self");
+      console.log(user);
+      //window.open("menu.html", "_self");
       // ...
     })
     .catch((error) => {
