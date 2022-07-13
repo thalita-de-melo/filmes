@@ -25,6 +25,7 @@ function data(email, password) {
     .then((userCredential) => {
       // Signed in
       console.log("logado");
+      console.log("lahskdjhskdjah");
       const user = userCredential.user;
       console.log(user);
       //window.open("menu.html", "_self");
