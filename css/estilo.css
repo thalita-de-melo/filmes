@@ -26,3 +26,8 @@ body {
   background-attachment: fixed;
   background-size: cover;
 }
+
+.centraliza {
+  margin-top: 25%;
+  margin-bottom: 25%;
+}
