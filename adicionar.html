@@ -111,9 +111,11 @@
 	    })
 	    .then((docRef) => { //mensagem de sucesso
 	    	console.log("Document written with ID: ", docRef.id);
+			alert("Filme Adicionado");
 		})
 		.catch((error) => { //mensagem de erro
 	    	console.error("Error adding document: ", error);
+			alert("Erro ao Adicionar o filme");
 		});
     }
 
